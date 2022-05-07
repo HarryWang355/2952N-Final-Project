@@ -64,7 +64,8 @@ class Embedder:
         return torch.cat([fn(inputs) for fn in self.embed_fns], -1)
 
 
-def get_embedder(type, multires, i=0, input_dims=3):
+def get_embedder(args, type, multires, i=0, input_dims=3):
+    print(f"EMBEDDER TYPE: {type}")
     if type == 'positional':
         if i == -1:
             return nn.Identity(), 3
@@ -82,10 +83,10 @@ def get_embedder(type, multires, i=0, input_dims=3):
         embed = lambda x, eo=embedder_obj : eo.embed(x)
         return embed, embedder_obj.out_dim
     elif type == 'grid':
-        #TODO: what is i?
+        print(f"EMBEDDING HASHTABLE SIZE: 2 ^ {args.hashtable_log2_size}")
         if i == -1:
             return nn.Identity(), 3
-        embedder = GridEncoder(input_dim=input_dims, num_levels=16, level_dim=2, base_resolution=16, log2_hashmap_size=19, gridtype='hash')
+        embedder = GridEncoder(input_dim=input_dims, num_levels=16, level_dim=2, base_resolution=16, log2_hashmap_size=args.hashtable_log2_size, gridtype='hash')
         embed = lambda x, e=embedder: e(x)
         return embed, embedder.output_dim
     else:

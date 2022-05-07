@@ -680,13 +680,13 @@ def create_nerf(args):
     """Instantiate NeRF's MLP model.
     """
     # XYZ + T
-    embed_fn, input_ch = get_embedder(args.encoding, args.multires, args.i_embed, 4)
+    embed_fn, input_ch = get_embedder(args, args.encoding, args.multires, args.i_embed, 4)
 
     input_ch_views = 0
     embeddirs_fn = None
 
     if args.use_viewdirs:
-        embeddirs_fn, input_ch_views = get_embedder(args.encoding, args.multires_views, args.i_embed, 3)
+        embeddirs_fn, input_ch_views = get_embedder(args, args.encoding, args.multires_views, args.i_embed, 3)
 
     output_ch = 5 if args.N_importance > 0 else 4
     skips = [4]
@@ -702,7 +702,7 @@ def create_nerf(args):
 
     grad_vars = list(model.parameters())
 
-    embed_fn_rigid, input_rigid_ch = get_embedder(args.encoding, args.multires, args.i_embed, 3)
+    embed_fn_rigid, input_rigid_ch = get_embedder(args, args.encoding, args.multires, args.i_embed, 3)
     model_rigid = Rigid_NeRF(D=args.netdepth, W=args.netwidth,
                              input_ch=input_rigid_ch, output_ch=output_ch, skips=skips,
                              input_ch_views=input_ch_views, 

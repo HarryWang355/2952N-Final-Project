@@ -127,13 +127,13 @@ class GridEncoder(nn.Module):
         self.reset_parameters()
     
     def reset_parameters(self):
-        std = 1e-4
+        std = 1e-1
         self.embeddings.data.uniform_(-std, std)
 
     def __repr__(self):
         return f"GridEncoder: input_dim={self.input_dim} num_levels={self.num_levels} level_dim={self.level_dim} base_resolution={self.base_resolution} per_level_scale={self.per_level_scale} params={tuple(self.embeddings.shape)} gridtype={self.gridtype}"
     
-    def forward(self, inputs, bound=1):
+    def forward(self, inputs, bound=2):
         # inputs: [..., input_dim], normalized real world positions in [-bound, bound]
         # return: [..., num_levels * level_dim]
 

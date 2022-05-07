@@ -15,7 +15,7 @@ from run_nerf_helpers import *
 from load_llff import load_nvidia_data
 import skimage.measure
 from skimage.metrics import structural_similarity
-
+from skimage.metrics import peak_signal_noise_ratio
 
 def im2tensor(image, imtype=np.uint8, cent=1., factor=1./2.):
     return torch.Tensor((image / factor - cent)
@@ -318,8 +318,8 @@ def evaluation():
                                     interpolation=cv2.INTER_AREA)
                 gt_img = np.float32(gt_img) / 255
 
-                psnr = skimage.measure.compare_psnr(gt_img, rgb)
-                ssim = skimage.measure.compare_ssim(gt_img, rgb, 
+                psnr = peak_signal_noise_ratio(gt_img, rgb)
+                ssim = structural_similarity(gt_img, rgb, 
                                                     multichannel=True)
 
                 gt_img_0 = im2tensor(gt_img).cuda()

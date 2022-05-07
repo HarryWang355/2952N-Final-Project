@@ -56,3 +56,11 @@ docs/_build/
 # PyBuilder
 target/
 
+dynamic_scene_data_full/
+nsff_exp/logs/
+
+*.jpg
+*.pth
+*.npy
+*.zip
+*.pt
