@@ -416,7 +416,8 @@ def render_rays_sm(img_idx,
                 raw_noise_std=0.,
                 verbose=False,
                 pytest=False,
-                inference=True):
+                inference=True, 
+                **kwargs):
     """Volumetric rendering.
     Args:
       ray_batch: array of shape [batch_size, ...]. All information necessary
@@ -755,6 +756,9 @@ def create_nerf(args):
         model_rigid.load_state_dict(ckpt['network_rigid'])
         if model_fine is not None:
             model_fine.load_state_dict(ckpt['network_fine_state_dict'])
+        embedder.load_state_dict(ckpt['embedder'])
+        embedder_dirs.load_state_dict(ckpt['embedder_dirs'])
+        embedder_rigid.load_state_dict(ckpt['embedder_rigid'])
 
     ##########################
     render_kwargs_train = {
@@ -768,7 +772,10 @@ def create_nerf(args):
         'use_viewdirs' : args.use_viewdirs,
         'white_bkgd' : args.white_bkgd,
         'raw_noise_std' : args.raw_noise_std,
-        'inference': False
+        'inference': False,
+        'embedder': embedder,
+        'embedder_dirs': embedder_dirs,
+        'embedder_rigid': embedder_rigid,
     }
 
     # NDC only good for LLFF-style forward facing data
@@ -943,7 +950,8 @@ def render_rays(img_idx,
                 raw_noise_std=0.,
                 verbose=False,
                 pytest=False,
-                inference=False):
+                inference=False, 
+                **kwargs):
 
     """Volumetric rendering.
     Args:

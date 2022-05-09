@@ -658,6 +658,9 @@ def train():
                     'network_fn_state_dict': render_kwargs_train['network_fn'].state_dict(),
                     'network_rigid': render_kwargs_train['network_rigid'].state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
+                    'embedder': render_kwargs_train['embedder'].state_dict(),
+                    'embedder_dirs': render_kwargs_train['embedder_dirs'].state_dict(),
+                    'embedder_rigid': render_kwargs_train['embedder_rigid'].state_dict(),
                 }, path)
             
             else:
@@ -666,6 +669,9 @@ def train():
                     'network_fn_state_dict': render_kwargs_train['network_fn'].state_dict(),
                     'network_rigid': render_kwargs_train['network_rigid'].state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
+                    'embedder': render_kwargs_train['embedder'].state_dict(),
+                    'embedder_dirs': render_kwargs_train['embedder_dirs'].state_dict(),
+                    'embedder_rigid': render_kwargs_train['embedder_rigid'].state_dict(),
                 }, path)
 
             print('Saved checkpoints at', path)
