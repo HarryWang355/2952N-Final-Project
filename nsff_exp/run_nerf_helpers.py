@@ -81,14 +81,14 @@ def get_embedder(args, type, multires, i=0, input_dims=3):
         
         embedder_obj = Embedder(**embed_kwargs)
         embed = lambda x, eo=embedder_obj : eo.embed(x)
-        return embed, embedder_obj.out_dim
+        return embedder_obj, embed, embedder_obj.out_dim
     elif type == 'grid':
         print(f"EMBEDDING HASHTABLE SIZE: 2 ^ {args.hashtable_log2_size}")
         if i == -1:
             return nn.Identity(), 3
         embedder = GridEncoder(input_dim=input_dims, num_levels=16, level_dim=2, base_resolution=16, log2_hashmap_size=args.hashtable_log2_size, gridtype='hash')
         embed = lambda x, e=embedder: e(x)
-        return embed, embedder.output_dim
+        return embedder, embed, embedder.output_dim
     else:
         raise ValueError("Unknown embedding type")
 

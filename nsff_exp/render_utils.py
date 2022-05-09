@@ -680,13 +680,15 @@ def create_nerf(args):
     """Instantiate NeRF's MLP model.
     """
     # XYZ + T
-    embed_fn, input_ch = get_embedder(args, args.encoding, args.multires, args.i_embed, 4)
+    embedder, embed_fn, input_ch = get_embedder(args, args.encoding, args.multires, args.i_embed, 4)
 
+    grad_vars = list(embedder.parameters())
     input_ch_views = 0
     embeddirs_fn = None
 
     if args.use_viewdirs:
-        embeddirs_fn, input_ch_views = get_embedder(args, args.encoding, args.multires_views, args.i_embed, 3)
+        embedder_dirs, embeddirs_fn, input_ch_views = get_embedder(args, args.encoding, args.multires_views, args.i_embed, 3)
+        grad_vars += list(embedder_dirs.parameters())
 
     output_ch = 5 if args.N_importance > 0 else 4
     skips = [4]
@@ -700,9 +702,11 @@ def create_nerf(args):
     device_ids = list(range(torch.cuda.device_count()))
     model = torch.nn.DataParallel(model, device_ids=device_ids)
 
-    grad_vars = list(model.parameters())
+    grad_vars += list(model.parameters())
 
-    embed_fn_rigid, input_rigid_ch = get_embedder(args, args.encoding, args.multires, args.i_embed, 3)
+    embedder_rigid, embed_fn_rigid, input_rigid_ch = get_embedder(args, args.encoding, args.multires, args.i_embed, 3)
+    grad_vars += list(embedder_rigid.parameters())
+    
     model_rigid = Rigid_NeRF(D=args.netdepth, W=args.netwidth,
                              input_ch=input_rigid_ch, output_ch=output_ch, skips=skips,
                              input_ch_views=input_ch_views, 
