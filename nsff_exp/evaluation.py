@@ -91,6 +91,8 @@ def config_parser():
                         help='log2 of max freq for positional encoding (2D direction)')
     parser.add_argument("--raw_noise_std", type=float, default=0., 
                         help='std dev of noise added to regularize sigma_a output, 1e0 recommended')
+    parser.add_argument("--hashtable_log2_size", type=int, default=19, 
+                        help='INGP hashtable size')
 
     parser.add_argument("--render_bt", action='store_true', 
                         help='render bullet time')
@@ -157,6 +159,10 @@ def config_parser():
     parser.add_argument("--i_weights", type=int, default=10000, 
                         help='frequency of weight ckpt saving')
 
+    parser.add_argument("--chain_sf", action='store_true', 
+                        help='5 frame consistency if true, \
+                             otherwise 3 frame consistency')
+                             
     return parser
 
 
