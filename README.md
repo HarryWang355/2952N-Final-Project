@@ -19,6 +19,8 @@ Next, install the required packages
 pip install -r requirements.txt
 ```
 
+Note: you might need to install a ```cupy``` package for your version of CUDA.
+
 ## Data preprocessing
 
 Please, refer to NSFF [instructions](https://github.com/zhengqili/Neural-Scene-Flow-Fields#video-preprocessing) on data downloading and preprocessing.
